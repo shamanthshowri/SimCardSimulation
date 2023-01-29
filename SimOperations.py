@@ -11,18 +11,18 @@ def create_connection():
 
 def create_table():
     conn = create_connection()
-    conn.execute('''create table SIM_CARD
+    conn.execute('''create table if not exists SIM_CARD
              (NUMBER         TEXT    NOT NULL,
              NAME         TEXT    NOT NULL,
              BALANCE        INT  NOT NULL);''')
-    conn.execute('''create table CONTACTS
+    conn.execute('''create table if not exists CONTACTS
              (NUMBER         TEXT    NOT NULL,
              NAME           TEXT    NOT NULL);''')
-    conn.execute('''create table CALL_LOG
+    conn.execute('''create table if not exists CALL_LOG
              (NUMBER         TEXT    NOT NULL,
              DURATION       REAL    NOT NULL,
              DATE           DATE    NOT NULL);''')
-    conn.execute('''create table MESSAGES
+    conn.execute('''create table if not exists MESSAGES
              (NUMBER         TEXT    NOT NULL,
              MESSAGE        TEXT    NOT NULL,
              DATE           DATE    NOT NULL);''')
@@ -194,14 +194,7 @@ def main():
 
 
 if __name__ == '__main__':
-
-    # conn = sqlite3.connect("sim_simulation.db")
-    # cursor = conn.cursor()
-    # result = cursor.fetchone()
-    # cursor.close()
-    # conn.close()
-    #
-    # if result is False:
-    #     create_table()
-
+    conn = create_connection()
+    create_table()
+    conn.close()
     main()
