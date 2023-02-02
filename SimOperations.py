@@ -12,11 +12,11 @@ def create_connection():
 def create_table():
     conn = create_connection()
     conn.execute('''create table if not exists SIM_CARD
-             (NUMBER         TEXT    NOT NULL,
+             (NUMBER         TEXT  UNIQUE  NOT NULL,
              NAME         TEXT    NOT NULL,
              BALANCE        INT  NOT NULL);''')
     conn.execute('''create table if not exists CONTACTS
-             (NUMBER         TEXT    NOT NULL,
+             (NUMBER         TEXT  UNIQUE NOT NULL,
              NAME           TEXT    NOT NULL);''')
     conn.execute('''create table if not exists CALL_LOG
              (NUMBER         TEXT    NOT NULL,
@@ -51,10 +51,12 @@ def add_contact(number, name):
 def call(number, duration):
 
     conn = create_connection()
+
     cursor = conn.execute("select BALANCE from SIM_CARD")
     for row in cursor:
+
         if row[0] > 0:
-            print("Calling ", number)
+            print("Calling... ", number)
             time.sleep(duration)
             conn.execute("insert into CALL_LOG (NUMBER, DURATION, DATE) \
                           values (?, ?, ?)", (number, duration, datetime.datetime.now()))
@@ -150,6 +152,8 @@ def main():
         print("-" * 75)
         choice = int(input("Enter your choice: "))
 
+
+
         if choice == 1:
 
             n = str(input("Name : "))
@@ -157,6 +161,7 @@ def main():
             bal = float(10)
             register_sim(num, n, bal)
             print("-" * 75)
+
         elif choice == 2:
             # id = int(input("Enter id: "))
             name = input("Enter name: ")
@@ -197,4 +202,5 @@ if __name__ == '__main__':
     conn = create_connection()
     create_table()
     conn.close()
+
     main()
